@@ -28,8 +28,10 @@ class RootVC: UIViewController {
                                                autoresizingMask: false)
     
     private lazy var successStack: UIStackView = {
-        let stack = UIStackView(arrangedSubviews: [successLabel, successImage])
+        let stack = UIStackView(arrangedSubviews: [successImage, successLabel])
         stack.translatesAutoresizingMaskIntoConstraints = false
+        stack.backgroundColor = .lightGray.withAlphaComponent(0.8)
+        stack.layer.cornerRadius = 12
         stack.axis = .vertical
         stack.spacing = 4
         stack.isHidden = true
@@ -108,11 +110,10 @@ private extension RootVC {
 // MARK: - Animate
 private extension RootVC {
     func animate() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2 ) {
-            UIView.animate(withDuration: 2) { [ weak self ] in
-                self?.successStack.isHidden = false
-            }
+        DispatchQueue.main.async { [ weak self ] in
+            self?.successStack.isHidden = false
         }
+
         DispatchQueue.main.asyncAfter(deadline: .now() + 3 ) {
             UIView.animate(withDuration: 2) { [ weak self ] in
                 self?.successStack.isHidden = true
@@ -143,8 +144,9 @@ private extension RootVC {
             developersTableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             
             successStack.topAnchor.constraint(equalTo: view.centerYAnchor),
-            successStack.leadingAnchor.constraint(equalTo: developersTableView.leadingAnchor),
-            successStack.trailingAnchor.constraint(equalTo: developersTableView.trailingAnchor)
+            successStack.leadingAnchor.constraint(equalTo: developersTableView.leadingAnchor, constant: 32),
+            successStack.trailingAnchor.constraint(equalTo: developersTableView.trailingAnchor, constant: -32),
+            successStack.heightAnchor.constraint(equalToConstant: 100)
         ])
     }
 }
